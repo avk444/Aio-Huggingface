@@ -10,14 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout GitHub repo (full history)
+      - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Trigger rebuild (edit README)
+      - name: Safe update (append below config)
         run: |
-          echo "Update: $(date)" >> README.md
+          echo "" >> README.md
+          echo "<!-- update: $(date) -->" >> README.md
 
       - name: Commit change
         run: |
@@ -26,7 +27,7 @@ jobs:
           git add README.md
           git commit -m "auto update" || echo "no changes"
 
-      - name: Push directly to Hugging Face
+      - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
