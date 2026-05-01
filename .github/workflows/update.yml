@@ -2,7 +2,7 @@ name: Auto Update HF Space
 
 on:
   schedule:
-    - cron: "0 */6 * * *"   # every 6 hours
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 jobs:
@@ -10,22 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Edit README (trigger rebuild)
-        run: |
-          echo "Update: $(date)" >> README.md
-
-      - name: Push to Hugging Face
+      - name: Clone HF Space fresh
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git config --global user.email "bot@example.com"
-          git config --global user.name "bot"
+          git clone https://Renegade44:${HF_TOKEN}@huggingface.co/spaces/Renegade44/AIOstreams hf_repo
 
-          git add README.md
+      - name: Copy files from GitHub repo
+        run: |
+          cp README.md hf_repo/README.md
+          cp Dockerfile hf_repo/Dockerfile
+
+      - name: Commit and push
+        run: |
+          cd hf_repo
+          git config user.email "bot@example.com"
+          git config user.name "bot"
+
+          git add .
           git commit -m "auto update" || echo "no changes"
 
-          git remote add hf https://Renegade44:${HF_TOKEN}@huggingface.co/spaces/Renegade44/AIOstreams
-          git push hf main --force
+          git push
