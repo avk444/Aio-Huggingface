@@ -18,8 +18,8 @@ jobs:
 
       - name: Copy files from GitHub repo
         run: |
-          cp README.md hf_repo/README.md
-          cp Dockerfile hf_repo/Dockerfile
+          cp README.md Aio-Huggingface/README.md
+          cp Dockerfile Aio-Huggingface/Dockerfile
 
       - name: Commit and push
         run: |
