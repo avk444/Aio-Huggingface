@@ -19,15 +19,15 @@ jobs:
         run: |
           git clone https://Renegade44:${HF_TOKEN}@huggingface.co/spaces/Renegade44/AIOstreams hf_repo
 
-      - name: Copy files (exclude hf_repo)
+      - name: Copy files
         run: |
           rsync -av --exclude=hf_repo ./ hf_repo/
 
-      - name: Trigger rebuild (edit README)
+      - name: Edit README (trigger rebuild)
         run: |
           echo "Update: $(date)" >> hf_repo/README.md
 
-      - name: Commit and push to Hugging Face
+      - name: Commit and push
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
@@ -41,4 +41,4 @@ jobs:
           git remote remove origin
           git remote add origin https://Renegade44:${HF_TOKEN}@huggingface.co/spaces/Renegade44/AIOstreams
 
-          git push origin main
+          git push origin main --force
