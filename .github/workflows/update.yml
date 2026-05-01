@@ -2,23 +2,25 @@ name: Auto Update HF Space
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 */6 * * *"   # runs every 6 hours
+  workflow_dispatch:        # allows manual run
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Edit Dockerfile
+      - name: Edit Dockerfile (force rebuild)
         run: |
           echo "# update $(date)" >> Dockerfile
 
-      - name: Push to HF
+      - name: Push to Hugging Face
         run: |
           git config --global user.email "bot@example.com"
           git config --global user.name "bot"
           git add Dockerfile
-          git commit -m "auto update"
-          git push https://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@huggingface.co/spaces/Renegade44/AIOstreams main
+          git commit -m "auto update" || echo "no changes"
+          git push https://Renegade44:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/Renegade44/AIOstreams main
