@@ -1,6 +1,9 @@
 name: Auto Update HF Space
 
 on:
+  push:
+    branches:
+      - master
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
@@ -25,7 +28,7 @@ jobs:
           git config user.email "bot@example.com"
           git config user.name "bot"
           git add README.md
-          git commit -m "auto update" || echo "no changes"
+          git commit -m "auto update" || echo "No changes to commit"
 
       - name: Push to Hugging Face
         env:
